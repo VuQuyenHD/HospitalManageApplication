@@ -1,0 +1,46 @@
+CREATE DATABASE `hospital_db`;
+use `hospital_db`;
+
+CREATE TABLE `hospital` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) NOT NULL,
+  `phone` int NOT NULL,
+  `address` varchar(200) NOT NULL,
+  `description` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`));
+
+
+CREATE TABLE `patient` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) NOT NULL,
+  `phone` int NOT NULL,
+  `email` varchar(200) NOT NULL,
+  `address` varchar(200) NOT NULL,
+  `hospital_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `patient_FK` (`hospital_id`),
+  CONSTRAINT `patient_FK` FOREIGN KEY (`hospital_id`) REFERENCES `hospital` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT);
+
+CREATE TABLE `doctor` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) NOT NULL,
+  `phone` varchar(10) DEFAULT NULL,
+  `email` varchar(200) NOT NULL,
+  `address` varchar(200) NOT NULL,
+  `hospital_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `doctor_FK` (`hospital_id`),
+  CONSTRAINT `doctor_FK` FOREIGN KEY (`hospital_id`) REFERENCES `hospital` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT);
+
+CREATE TABLE `schedule` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) NOT NULL,
+  `date` datetime NOT NULL,
+  `doctor_id` int NOT NULL,
+  `patient_id` int NOT NULL,
+  `result` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `schedule_FK` (`doctor_id`),
+  KEY `schedule_FK_1` (`patient_id`),
+  CONSTRAINT `schedule_FK` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+  CONSTRAINT `schedule_FK_1` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT);
